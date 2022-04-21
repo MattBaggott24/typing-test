@@ -1,4 +1,4 @@
-const quoteApiUrl = "https://api.quotable.io/random?minLength=100&maxLength=140";
+const quoteApiUrl = "https://api.quotable.io/random?minLength=80&maxLength=100";
 
 const quoteSection = document.getElementById("quote");
 
@@ -102,50 +102,42 @@ const displayResult = () => {
     document.querySelector(".result").style.display = "block";
     clearInterval(timer);
     document.getElementById("stop-test").style.display = "none";
+    document.getElementById("new-test").style.display = "block";
     userInput.disabled = true;
     let timeTaken = 1;
     if (time != 0) {
         timeTaken = (60 - time) / 100;
     }
 
-    // cannot use .filter??????
-    // remove blank chars
-    // let tempCount = 0;
-    // userInput.forEach(element => {
-    //     if (element == " ") {
-    //         console.log("empty");
-    //         tempCount++;
-    //     }
-    // });
-
-    // console.log(quoteChars);
-    // console.log(quoteChars.length);
-
-    // console.log(userInputChars);
-    // console.log(userInput.value
-
     let userInputNoSpace = (userInput.value).replace(/\s/g, '');
-    // console.log(userInputNoSpace);
-    // console.log("temp: " + temp);
 
-    // userInput = userInput.filter(function (el) {
-    //     return el != null;
-    // });
-
-    let tempCount = 0;
+    let wordCount = 1;
 
     for (let vals in userInput.value) {
         if (userInput.value[vals] == " ") {
-            tempCount++;
+            wordCount++;
         }
     }
 
-    console.log("amount of words: " + tempCount);
-    console.log((userInputNoSpace.length / 5 / timeTaken).toFixed(2) + " wpm")
-    console.log((userInput.value.length / 5 / timeTaken).toFixed(2) + " wpm")
-    console.log("tempcount/timeTaken" + tempCount / timeTaken);
-    console.log((tempCount / timeTaken).toFixed(2));
-    document.getElementById("wpm").innerText = (userInputNoSpace.length / 5 / timeTaken).toFixed(2) + " wpm";
+    let averageWordLength = userInputNoSpace.length / wordCount;
+
+    console.log(averageWordLength);
+    console.log(userInput.value.length / averageWordLength);
+
+    // different ways of calculating wpm
+
+    // console.log("amount of words: " + wordCount);
+    // console.log((userInputNoSpace.length / 5 / timeTaken).toFixed(2) + " wpm")
+    // console.log((userInput.value.length / 5 / timeTaken).toFixed(2) + " wpm")
+    // console.log("wordCount/timeTaken" + wordCount / timeTaken);
+
+    // let temp3 = (wordCount / (timeTaken * 100)) * 60;
+
+    // console.log("temp3 " + temp3);
+
+    // console.log(timeTaken);
+    // console.log(wordCount / (timeTaken * 100).toFixed(2));
+    document.getElementById("wpm").innerText = ((userInput.value.length / averageWordLength) / (timeTaken * 100) * 60).toFixed(0) + " wpm";
     document.getElementById("accuracy").innerText = Math.round(((userInput.value.length - mistakes) / userInput.value.length) * 100) + "%";
 };
 
@@ -156,13 +148,20 @@ const startTest = () => {
     userInput.disabled = false;
     timeReduce();
     document.getElementById("start-test").style.display = "none";
+    document.getElementById("new-test").style.display = "none";
     document.getElementById("stop-test").style.display = "block";
+    document.getElementById("quote-input").focus();
+}
+
+const newTest = () => {
+    document.location.reload();
 }
 
 window.onload = () => {
     userInput.value = "";
     document.getElementById("start-test").style.display = "block";
     document.getElementById("stop-test").style.display = "none";
+    document.getElementById("new-test").style.display = "none";
     userInput.disabled = true;
     renderNewQuote();
 }

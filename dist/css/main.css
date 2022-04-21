@@ -57,6 +57,10 @@ button {
   font-size: 1.1rem;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 .result {
   margin-top: 40px;
   display: none;
